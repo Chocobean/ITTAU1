@@ -19,4 +19,5 @@ jobs:
           ls -la
 
       - name: Create a short file artifact
-        run: echo "Student: $USER" > student-info.txt
+        run: |
+          echo "Student: $USER" > student-info.txt
