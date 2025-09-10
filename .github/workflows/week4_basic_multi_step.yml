@@ -1,0 +1,22 @@
+name: Week4 – Basic Multi-step
+
+on:
+  push:                # trigger when any commit is pushed
+    branches:
+      - '**'
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest  # Linux runner
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3   # downloads repo so steps can access files
+
+      - name: Show repo info
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Branch: $GITHUB_REF"
+          ls -la
+
+      - name: Create a short file artifact
+        run: echo "Student: $USER" > student-info.txt
