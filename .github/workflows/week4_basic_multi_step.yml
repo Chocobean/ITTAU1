@@ -1,23 +1,56 @@
-name: Week4 – Basic Multi-step
+name: Week4 – Artifact Demo
 
+# Trigger the workflow on any push to the main branch
 on:
-  push:                # trigger when any commit is pushed
+  push:
     branches:
-      - '**'
+      - main
 
 jobs:
-  demo:
-    runs-on: ubuntu-latest  # Linux runner
+  create-artifact:
+    name: Create and Upload Artifact
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-path: ${{ steps.upload.outputs.artifact-path }}
     steps:
+      # Step 1: Checkout the repo
       - name: Checkout repository
-        uses: actions/checkout@v3   # downloads repo so steps can access files
+        uses: actions/checkout@v3
 
-      - name: Show repo info
+      # Step 2: Generate a file with useful info
+      - name: Create student info file
         run: |
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Branch: $GITHUB_REF"
-          ls -la
+          echo "Student Name: John Doe" > student-info.txt
+          echo "Date: $(date)" >> student-info.txt
+          echo "GitHub Repository: $GITHUB_REPOSITORY" >> student-info.txt
+          cat student-info.txt
 
-      - name: Create a short file artifact
+      # Step 3: Upload the file as an artifact
+      - name: Upload artifact
+        id: upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: student-info
+          path: student-info.txt
+
+  use-artifact:
+    name: Download and Read Artifact
+    runs-on: ubuntu-latest
+    needs: create-artifact
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Download the artifact from the previous job
+      - name: Download student info artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: student-info
+          path: downloaded-artifact
+
+      # Step 3: Display the contents of the artifact
+      - name: Display artifact contents
         run: |
-          echo "Student: $USER" > student-info.txt
+          echo "Contents of student-info.txt:"
+          cat downloaded-artifact/student-info.txt
