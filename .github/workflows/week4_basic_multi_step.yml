@@ -28,7 +28,7 @@ jobs:
       # Step 3: Upload the file as an artifact
       - name: Upload artifact
         id: upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: student-info
           path: student-info.txt
@@ -44,7 +44,7 @@ jobs:
 
       # Step 2: Download the artifact from the previous job
       - name: Download student info artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: student-info
           path: downloaded-artifact
