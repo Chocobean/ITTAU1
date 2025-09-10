@@ -1,0 +1,12 @@
+name: Hello World Workflow
+
+on: [push]   # Trigger: run when I push code
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest   # Job will run on a Linux VM
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3   # Pre-built action to get repo code
+      - name: Print message
+        run: echo "Hello, GitHub Actions!"
